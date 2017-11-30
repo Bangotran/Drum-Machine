@@ -1,8 +1,9 @@
-import React from 'react'
-import tone, {Player} from 'tone'
-import samples from './samples.json'
+import React, { Component } from 'react'
+import Tone, { Transport, Player} from 'tone'
+import Samples from './samples.json'
+import SoundNode from './soundNode'
 
-const sounds = samples.map(sample=>require(`../audio/${sample}.wav`));
+const sounds = Samples.map(sample=>require(`../audio/${sample}.wav`));
 
 // let synth = new Tone.Synth().toMaster();
 
@@ -22,18 +23,28 @@ player.autostart = true;
 // 	"url" : "../audio/kick-808.wav",
 // 	"autostart" : true,
 // }).toMaster();
+function createTrack(color) {
+  let steps = []
+  for (let i = 0; i < 16; i++) {
+    steps.push(false)
+  }
+  return { steps: steps, color: color}
+}
 
-
-const Track = (props) => {
-  return (
+class Track extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      
+    }
+  }
+  render() {
+    return(
       <div>
-        <button value="Play">Play
-
-        </button>
-
+        <SoundNode />
       </div>
-
-  )
+    )
+  }
 }
 
 export default Track
