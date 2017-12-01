@@ -3,7 +3,8 @@ import Tone, { Transport, Player} from 'tone'
 import Samples from './samples.json'
 import Beat from './beat'
 
-const sounds = Samples.map(sample=>require(`../audio/${sample}.wav`));
+const sounds = {}
+Samples.forEach(sample=>{sounds[sample] = require(`../audio/${sample}.wav`)});
 
 console.log(sounds);
 // let player = new Player(sounds[21]).toMaster();
@@ -19,27 +20,15 @@ console.log(sounds);
 class Track extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      beats: Array(16).fill(false),
-      // tone ---> sample
-    }
+    this.renderBeats = this.renderBeats.bind(this)
   }
 
-  onHandleClick(index) {
-    let beats = this.state.beats;
-    beats[index] = !beats[index];
-    this.setState({
-      beats
-    })
+  onHandleClick(trackIndex, index) {
+    this.props.clickBeat(trackIndex,index)
   }
 
   renderBeats () {
-    return this.state.beats.map((value, i) => (<Beat key={i} onClick={() => this.onHandleClick(i)} active={value} />))
-  }
-
-  removeTrack () {
-    console.log('removed')
-    return
+    return this.props.beats.map((value, i) => (<Beat key={i} onClick={() => this.onHandleClick(this.props.i, i)} active={value} />))
   }
 
   render() {
@@ -47,7 +36,7 @@ class Track extends Component {
       <div>
         {/* render instrument dropdown here */}
         {this.renderBeats()}
-        <button onClick={this.removeTrack.bind(this)}>-</button>
+        <button onClick={() =>this.props.removeTrack(this.props.i)}>-</button>
       </div>
     )
   }
