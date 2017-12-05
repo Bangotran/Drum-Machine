@@ -25,12 +25,11 @@ class Track extends Component {
 
   render() {
     const { sounds } = this.props;
-    // console.log(sounds);
     return(
       <div>
         <Dropdown onChange={value => this.props.onChange(value, this.props.i)} placeholder='Select a Sample' search selection options={sounds} />
         {this.renderBeats()}
-        <button onClick={() =>this.props.removeTrack(this.props.i)}>-</button>
+        <i className="trash outline icon big blue" onClick={() =>this.props.removeTrack(this.props.i)}></i>
       </div>
     )
   }

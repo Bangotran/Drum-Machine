@@ -13,18 +13,15 @@ Samples.forEach(sample => {
   }
 )});
 
-
-// const Player = new Tone.Transport ()
-
 class Tracks extends Component {
   constructor(props) {
     super(props)
     const track = this.newTrack;
     this.state = {
-      tracks: [track()],
-      // tracks: [track(),track(),track()],
-      loop: this.create([track()])
-      // BPM: Tone.Transport.bpm.value = 120
+      tracks: [track(), track(), track(), track()],
+      loop: this.create([track()]),
+      step: -1,
+      bpm: 120
     }
     this.removeTrack = this.removeTrack.bind(this)
     this.clickBeat = this.clickBeat.bind(this)
@@ -34,7 +31,6 @@ class Tracks extends Component {
   // state of playing here
   // whether each track is playing or not (what index)
 
-  //
   newTrack () {
     return {
       sample: 'clap-808',
@@ -42,40 +38,32 @@ class Tracks extends Component {
     }
   }
 
-  // toggleTrack() {
-  //
-  // }
-
-  loopReducer(tracks) {
-    console.log(tracks);
+  loopReducer(tracks, tempo) {
+    // console.log(tracks);
     const urls = tracks.reduce((acc, track) => {
-      console.log(track.sample)
+      // console.log(track.sample)
       return {...acc, [track.sample]: require(`../audio/${track.sample}.wav`)};
     }, {});
-    console.log('urls');
-    console.dir(urls);
+    // console.log('urls');
+    // console.dir(urls);
     const keys = new Tone.Players(
     urls,
     "autostart": true,
-    // volume : 1,
-    // fadeOut : 0.1,
   ).toMaster();
-    console.dir(keys);
+    // console.dir(keys);
     return (time, index) => {
       tracks.forEach(({sample, beats}) => {
         if (beats[index]) {
-          // let player = keys.get(sample);
-          // player.autostart = true;
-          console.log(beats[index])
-          console.log(keys)
-            keys.get(sample).start(time, 0, "32n", 0)
+          // console.log(beats[index])
+          // console.log(keys)
+            keys.get(sample).start(time, 0, "4n", 0)
         }
       });
     };
   }
 
-  update(loop, tracks) {
-    loop.callback = this.loopReducer(tracks);
+  update(loop, tracks, tempo) {
+    loop.callback = this.loopReducer(tracks, tempo);
     return loop;
   }
 
@@ -103,17 +91,21 @@ class Tracks extends Component {
     })
   }
 
-  create(tracks){
+  create(tracks, tempo){
     const loop = new Tone.Sequence(
-      this.loopReducer(tracks),
+      this.loopReducer(tracks, tempo),
       new Array(16).fill(0).map((_, i) => i),
       "16n"
     );
 
     Tone.Transport.bpm.value = 120;
     Tone.Transport.start();
-    console.log(loop)
+    // console.log(loop)
     return loop;
+  }
+
+  updateBPM = (bpm) => {
+    Tone.Transport.bpm.value = bpm
   }
 
   start = () => {
@@ -124,21 +116,8 @@ class Tracks extends Component {
     this.state.loop.stop();
   };
 
-    // const sample = this.props.sample;
-    // if (sample) {
-    //   let player = new Player(require(`../audio/${sample}.wav`)).toMaster();
-    //   // // play as soon as the buffer is loaded
-    //   player.autostart = true;
-    // }
-
-    // Tone.Transport.toggle()
-    // let player = new Player(sounds[1].value).toMaster();
-    // // play as soon as the buffer is loaded
-    // player.autostart = true;
-
-
   onChange (event, i) {
-    console.dir(event.target);
+    // console.dir(event.target);
     let sample = event.target.innerText;
     const tracks = this.state.tracks;
     tracks[i].sample = sample;
@@ -148,9 +127,17 @@ class Tracks extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.start}>start</button>
-        <button onClick={this.stop}>stop</button>
-        {/* <button onClick={this.toggleTrack.bind(this)}>Play</button> */}
+        <div className="controls">
+          <button className="small ui inverted blue icon button" onClick={this.start}><i className="large blue play icon"></i></button>
+          <button className="small ui inverted blue icon button" onClick={this.stop}><i className="large stop circle icon"></i></button>
+          <span className="Bpm">BPM</span>
+          <input>{this.bpm}</input>
+          {this.bpm}
+
+          <br />
+        </div>
+        <hr className="divider"/>
+
         {this.state.tracks.map((track, i) => (
           <Track key={i}
             step={this.state.step}
@@ -160,11 +147,11 @@ class Tracks extends Component {
             sounds={sounds}
             onChange={this.onChange}
           />))}
-        <button onClick={this.handleClick.bind(this)}>+</button>
+          <br />
+        <button className="ui inverted blue button" onClick={this.handleClick.bind(this)}>Add Track +</button>
       </div>
     )
   }
 }
-
 
 export default Tracks;

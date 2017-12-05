@@ -1,16 +1,53 @@
 body {
-  background: lightslategrey;
+  /*background: #3b444b;*/
+  background: linear-gradient(black, slategrey, royalblue);
+  color: white;
 }
 
 .Beat {
-  width: 45px;
-  height: 45px;
-  border: 1px solid black;
-  background: azure;
-  margin-left: 5px;
-  margin-bottom: 5px;
+  width: 47px;
+  height: 55px;
+  border: 2px solid deepskyblue;
+  background: slategray;
+  margin-left: 7px;
+  margin-right: 7px;
+  margin-top: 7px;
+  box-shadow: 2px 2px 10px 0px deepskyblue;
 }
 
 .Beat.on {
   background: deepskyblue;
+}
+
+.App {
+  padding: 0px;
+  margin-left: 40px;
+  margin-top: 25px;
+}
+
+.ui.search.selection.dropdown {
+  margin-right: 10px;
+  border: 0;
+  background-color: slategray;
+  color: deepskyblue;
+}
+
+.ui.search.selection.dropdown {
+  margin-right: 10px;
+  border: 0;
+  background-color: slategray;
+  color: deepskyblue;
+}
+
+.button.small.ui.inverted {
+  margin-left: 13px;
+  margin-bottom: 5px;
+}
+
+.Bpm {
+  margin: 0 10px;
+}
+
+.divider {
+  border: 2px solid deepskyblue;
 }

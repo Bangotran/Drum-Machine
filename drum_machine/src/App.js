@@ -6,7 +6,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Bangin Beats!</h1>
+        {/* <h1 className="ui blue inverted header">Bangin Beats!</h1> */}
         <Tracks />
       </div>
     );
