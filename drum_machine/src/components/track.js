@@ -1,21 +1,7 @@
 import React, { Component } from 'react'
-import Tone, { Transport, Player} from 'tone'
-import Samples from './samples.json'
 import Beat from './beat'
-
-const sounds = {}
-Samples.forEach(sample=>{sounds[sample] = require(`../audio/${sample}.wav`)});
-
-console.log(sounds);
-// let player = new Player(sounds[21]).toMaster();
-//play as soon as the buffer is loaded
-// player.autostart = true;
-
-// const p = new Player({
-// 	"url" : "../audio/kick-808.wav",
-// 	"autostart" : true,
-// }).toMaster();
-
+import { Dropdown } from 'semantic-ui-react'
+import Tone, { Player } from 'tone'
 
 class Track extends Component {
   constructor(props) {
@@ -24,6 +10,12 @@ class Track extends Component {
   }
 
   onHandleClick(trackIndex, index) {
+    const sample = this.props.sample;
+    if (sample) {
+      let player = new Player(require(`../audio/${sample}.wav`)).toMaster();
+      // // play as soon as the buffer is loaded
+      player.autostart = true;
+    }
     this.props.clickBeat(trackIndex,index)
   }
 
@@ -32,9 +24,11 @@ class Track extends Component {
   }
 
   render() {
+    const { sounds } = this.props;
+    // console.log(sounds);
     return(
       <div>
-        {/* render instrument dropdown here */}
+        <Dropdown onChange={value => this.props.onChange(value, this.props.i)} placeholder='Select a Sample' search selection options={sounds} />
         {this.renderBeats()}
         <button onClick={() =>this.props.removeTrack(this.props.i)}>-</button>
       </div>

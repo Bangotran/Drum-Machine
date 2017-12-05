@@ -6,6 +6,7 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-scripts": "1.0.17",
+    "semantic-ui-react": "^0.77.0",
     "tone": "^0.11.11"
   },
   "scripts": {
