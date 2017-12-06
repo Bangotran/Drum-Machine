@@ -27,6 +27,7 @@ class Tracks extends Component {
     this.clickBeat = this.clickBeat.bind(this)
     this.onChange = this.onChange.bind(this)
     this.loopReducer = this.loopReducer.bind(this)
+    this.handleBPMChange =this.handleBPMChange.bind(this);
   }
   // state of playing here
   // whether each track is playing or not (what index)
@@ -124,6 +125,13 @@ class Tracks extends Component {
     this.setState({ tracks })
   }
 
+  handleBPMChange(ev){
+    this.setState({
+      bpm: ev.target.value
+    });
+    this.updateBPM(ev.target.value);
+  }
+
   render() {
     return (
       <div>
@@ -131,7 +139,10 @@ class Tracks extends Component {
           <button className="small ui inverted blue icon button" onClick={this.start}><i className="large blue play icon"></i></button>
           <button className="small ui inverted blue icon button" onClick={this.stop}><i className="large stop circle icon"></i></button>
           <span className="Bpm">BPM</span>
-          <input>{this.bpm}</input>
+          <input
+            onChange={this.handleBPMChange}
+            value={this.state.bpm}
+            >{this.bpm}</input>
           {this.bpm}
 
           <br />
