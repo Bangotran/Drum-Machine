@@ -1,63 +1,62 @@
-import React, { Component } from 'react'
-import Tone, { Transport, Player, Players, Sequence } from 'tone'
+import React, { Component } from 'react';
+import Tone from 'tone';
+import Samples from './samples.json';
+import Track from './track';
 
-import Samples from './samples.json'
-import Track from './track'
-
-const sounds = []
+const sounds = [];
 
 Samples.forEach(sample => {
   sounds.push({
     text: sample,
-    value: sample
-  }
-)});
+    value: sample,
+  });
+});
 
 class Tracks extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     const track = this.newTrack;
     this.state = {
       tracks: [track(), track(), track(), track()],
-      loop: this.create([track()]),
-      step: -1,
-      bpm: 120
-    }
-    this.removeTrack = this.removeTrack.bind(this)
-    this.clickBeat = this.clickBeat.bind(this)
-    this.onChange = this.onChange.bind(this)
-    this.loopReducer = this.loopReducer.bind(this)
-    this.handleBPMChange =this.handleBPMChange.bind(this);
+      loop: this.create([track()], this.updateCurrentBeat()),
+      currentBeat: -1,
+      bpm: 120,
+    };
+    this.removeTrack = this.removeTrack.bind(this);
+    this.clickBeat = this.clickBeat.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.loopReducer = this.loopReducer.bind(this);
+    this.handleBPMChange = this.handleBPMChange.bind(this);
   }
   // state of playing here
   // whether each track is playing or not (what index)
 
-  newTrack () {
+  newTrack() {
     return {
-      sample: 'clap-808',
-      beats: Array(16).fill(false)
-    }
+      sample: 'kick-808',
+      beats: Array(16).fill(false),
+    };
   }
 
   loopReducer(tracks, tempo) {
     // console.log(tracks);
     const urls = tracks.reduce((acc, track) => {
       // console.log(track.sample)
-      return {...acc, [track.sample]: require(`../audio/${track.sample}.wav`)};
+      return {
+        ...acc,
+        [track.sample]: (`../audio/${track.sample}.wav`),
+      };
     }, {});
     // console.log('urls');
     // console.dir(urls);
-    const keys = new Tone.Players(
-    urls,
-    "autostart": true,
-  ).toMaster();
+    const keys = new Tone.Players(urls, ('autostart': true)).toMaster();
     // console.dir(keys);
     return (time, index) => {
-      tracks.forEach(({sample, beats}) => {
+      tracks.forEach(({ sample, beats }) => {
         if (beats[index]) {
           // console.log(beats[index])
           // console.log(keys)
-            keys.get(sample).start(time, 0, "4n", 0)
+          keys.get(sample).start(time, 0, '8n', 0);
         }
       });
     };
@@ -68,35 +67,35 @@ class Tracks extends Component {
     return loop;
   }
 
-  clickBeat (trackIndex, beatIndex) {
-    const tracks = this.state.tracks
-    tracks[trackIndex].beats[beatIndex] = !tracks[trackIndex].beats[beatIndex]
+  clickBeat(trackIndex, beatIndex) {
+    const tracks = this.state.tracks;
+    tracks[trackIndex].beats[beatIndex] = !tracks[trackIndex].beats[beatIndex];
     this.setState({
       tracks,
-      loop: this.update(this.state.loop, tracks)
-    })
+      loop: this.update(this.state.loop, tracks),
+    });
   }
 
   handleClick() {
     this.setState({
-      tracks: this.state.tracks.concat([this.newTrack()])
-    })
+      tracks: this.state.tracks.concat([this.newTrack()]),
+    });
   }
 
-  removeTrack (i) {
+  removeTrack(i) {
     this.setState({
-      tracks: this.state.tracks.filter(function (element, index) {
-        if (i===index) console.log('removing this one');
-        return i != index
-      })
-    })
+      tracks: this.state.tracks.filter(function(element, index) {
+        if (i === index) console.log('removing this one');
+        return i != index;
+      }),
+    });
   }
 
-  create(tracks, tempo){
+  create(tracks) {
     const loop = new Tone.Sequence(
-      this.loopReducer(tracks, tempo),
-      new Array(16).fill(0).map((_, i) => i),
-      "16n"
+      this.loopReducer(tracks),
+      new Array(16).fill(false).map((_, beat) => beat),
+      '16n'
     );
 
     Tone.Transport.bpm.value = 120;
@@ -105,30 +104,39 @@ class Tracks extends Component {
     return loop;
   }
 
-  updateBPM = (bpm) => {
-    Tone.Transport.bpm.value = bpm
+  updateBPM = bpm => {
+    Tone.Transport.bpm.value = bpm;
+  };
+
+  updateCurrentBeat = () => {
+    this.setState({currentBeat: this.beat})
+    console.log(this.beat)
   }
 
   start = () => {
     this.state.loop.start();
+    console.log(this.state.currentBeat)
   };
 
   stop = () => {
     this.state.loop.stop();
+    this.setState({currentBeat: -1})
+    console.log(this.state.currentBeat)
   };
 
-  onChange (event, i) {
+  onChange(event, i) {
     // console.dir(event.target);
     let sample = event.target.innerText;
     const tracks = this.state.tracks;
     tracks[i].sample = sample;
-    this.setState({ tracks })
+    this.setState({ tracks });
   }
 
-  handleBPMChange(ev){
+  handleBPMChange(ev) {
     this.setState({
-      bpm: ev.target.value
+      bpm: ev.target.value,
     });
+    // console.log(ev.target.value);
     this.updateBPM(ev.target.value);
   }
 
@@ -136,32 +144,48 @@ class Tracks extends Component {
     return (
       <div>
         <div className="controls">
-          <button className="small ui inverted blue icon button" onClick={this.start}><i className="large blue play icon"></i></button>
-          <button className="small ui inverted blue icon button" onClick={this.stop}><i className="large stop circle icon"></i></button>
+          <button
+            className="small ui inverted blue icon button"
+            onClick={this.start}
+          >
+            <i className="large blue play icon" />
+          </button>
+          <button
+            className="small ui inverted blue icon button"
+            onClick={this.stop}
+          >
+            <i className="large stop circle icon" />
+          </button>
           <span className="Bpm">BPM</span>
-          <input
-            onChange={this.handleBPMChange}
-            value={this.state.bpm}
-            >{this.bpm}</input>
-          {this.bpm}
 
+          <input className="BpmSlider" type="range" min="60" max="200" onChange={this.handleBPMChange} value={this.state.bpm} />
+          <input className="BpmText" value={this.state.bpm} onChange={this.handleBPMChange} />
           <br />
         </div>
-        <hr className="divider"/>
+        <hr className="divider" />
 
-        {this.state.tracks.map((track, i) => (
-          <Track key={i}
-            step={this.state.step}
-            removeTrack={this.removeTrack} i={i}
-            beats={track.beats} clickBeat={this.clickBeat}
+        {this.state.tracks.map((track, i) =>
+          <Track
+            key={i}
+            currentBeat={this.currentBeat}
+            removeTrack={this.removeTrack}
+            i={i}
+            beats={track.beats}
+            clickBeat={this.clickBeat}
             sample={track.sample}
             sounds={sounds}
             onChange={this.onChange}
-          />))}
-          <br />
-        <button className="ui inverted blue button" onClick={this.handleClick.bind(this)}>Add Track +</button>
+          />
+        )}
+        <br />
+        <button
+          className="ui inverted blue button"
+          onClick={this.handleClick.bind(this)}
+        >
+          Add Track +
+        </button>
       </div>
-    )
+    );
   }
 }
 

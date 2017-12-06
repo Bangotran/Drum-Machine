@@ -19,6 +19,10 @@ body {
   background: deepskyblue;
 }
 
+.Beat.current {
+  background: royalblue;
+}
+
 .App {
   padding: 0px;
   margin-left: 40px;
@@ -45,6 +49,17 @@ body {
 }
 
 .Bpm {
+  margin: 0 10px;
+  color: deepskyblue;
+}
+
+.BpmText {
+  width: 40px;
+  background-color: inherit;
+  color: deepskyblue;
+  border: 0px;
+}
+.BpmSlider {
   margin: 0 10px;
 }
 
