@@ -1,0 +1,100 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body {
+  background: linear-gradient(black, slategrey, royalblue);
+  color: white;
+}
+.Main {
+  margin-top: 50px;
+}
+
+.Tracks {
+  padding: 0px;
+  margin-left: 100px;
+  margin-top: 25px;
+}
+
+.Beat {
+  width: 47px;
+  height: 55px;
+  border: 2px solid deepskyblue;
+  background: slategray;
+  margin-left: 7px;
+  margin-right: 7px;
+  margin-top: 7px;
+  box-shadow: 2px 2px 10px 0px deepskyblue;
+}
+
+.Beat.on {
+  background: deepskyblue;
+}
+
+.Beat.current {
+  background: royalblue;
+}
+
+.ui.search.selection.dropdown {
+  margin-right: 10px;
+  border: 0;
+  background-color: slategray;
+  color: deepskyblue;
+}
+
+.ui.search.selection.dropdown {
+  margin-right: 10px;
+  border: 0;
+  background-color: slategray;
+  color: deepskyblue;
+}
+
+.button.small.ui.inverted {
+  margin-left: 13px;
+  margin-bottom: 5px;
+}
+
+.Bpm {
+  margin: 0 10px;
+  color: deepskyblue;
+}
+
+.BpmText {
+  width: 40px;
+  background-color: inherit;
+  color: deepskyblue;
+  border: 0px;
+}
+.BpmSlider {
+  margin: 0 10px;
+}
+
+.divider {
+  margin-left: 0;
+  width: 1200px;
+  border: 2px solid deepskyblue;
+}
+
+.footer {
+  background: linear-gradient(slategrey, black);
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  text-align: right;
+}
+
+.footerText {
+  text-align: left;
+  color: deepskyblue;
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+.footerIcons {
+  margin-right: 25px;
+  color: deepskyblue;
+}

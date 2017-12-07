@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "howler": "^2.0.5",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "semantic-ui-react": "^0.77.0",
+    "tone": "^0.11.11"
   },
   "scripts": {
     "start": "react-scripts start",
