@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import Tone from 'tone';
-import Samples from './samples.json';
-import Track from './track';
+import React, { Component } from "react";
+import Tone from "tone";
+import Samples from "./samples.json";
+import Track from "./track";
 
 const sounds = [];
 
 Samples.forEach(sample => {
   sounds.push({
     text: sample,
-    value: sample,
+    value: sample
   });
 });
 
@@ -18,9 +18,9 @@ class Tracks extends Component {
     const track = this.newTrack;
     this.state = {
       tracks: [track(), track(), track(), track()],
-      loop: this.create([track()], this.updateCurrentBeat()),
+      loop: this.create([track()]),
       currentBeat: -1,
-      bpm: 120,
+      bpm: 120
     };
     this.removeTrack = this.removeTrack.bind(this);
     this.clickBeat = this.clickBeat.bind(this);
@@ -28,35 +28,30 @@ class Tracks extends Component {
     this.loopReducer = this.loopReducer.bind(this);
     this.handleBPMChange = this.handleBPMChange.bind(this);
   }
-  // state of playing here
-  // whether each track is playing or not (what index)
 
   newTrack() {
     return {
-      sample: 'kick-808',
-      beats: Array(16).fill(false),
+      sample: "kick-808",
+      beats: Array(16).fill(false)
     };
   }
 
-  loopReducer(tracks, tempo) {
-    // console.log(tracks);
+  loopReducer(tracks) {
     const urls = tracks.reduce((acc, track) => {
-      // console.log(track.sample)
       return {
         ...acc,
-        [track.sample]: (`../audio/${track.sample}.wav`),
+        [track.sample]: `../audio/${track.sample}.wav`
       };
     }, {});
-    // console.log('urls');
-    // console.dir(urls);
-    const keys = new Tone.Players(urls, ('autostart': true)).toMaster();
-    // console.dir(keys);
-    return (time, index) => {
+
+    const keys = new Tone.Players(urls, ("autostart": true)).toMaster();
+    return (time, note) => {
+      // for every track we want to do the following
+      this.updateCurrentBeat(note);
       tracks.forEach(({ sample, beats }) => {
-        if (beats[index]) {
-          // console.log(beats[index])
-          // console.log(keys)
-          keys.get(sample).start(time, 0, '8n', 0);
+        // check whether that beat should be played based upon the sequencer's note progression
+        if (beats[note]) {
+          keys.get(sample).start(time, 0, "4n", 0);
         }
       });
     };
@@ -72,22 +67,22 @@ class Tracks extends Component {
     tracks[trackIndex].beats[beatIndex] = !tracks[trackIndex].beats[beatIndex];
     this.setState({
       tracks,
-      loop: this.update(this.state.loop, tracks),
+      loop: this.update(this.state.loop, tracks)
     });
   }
 
   handleClick() {
     this.setState({
-      tracks: this.state.tracks.concat([this.newTrack()]),
+      tracks: this.state.tracks.concat([this.newTrack()])
     });
   }
 
   removeTrack(i) {
     this.setState({
       tracks: this.state.tracks.filter(function(element, index) {
-        if (i === index) console.log('removing this one');
+        if (i === index) console.log("removing this one");
         return i != index;
-      }),
+      })
     });
   }
 
@@ -95,12 +90,12 @@ class Tracks extends Component {
     const loop = new Tone.Sequence(
       this.loopReducer(tracks),
       new Array(16).fill(false).map((_, beat) => beat),
-      '16n'
+      "16n"
     );
 
     Tone.Transport.bpm.value = 120;
-    Tone.Transport.start();
-    // console.log(loop)
+    Tone.Transport.start(0.1);
+
     return loop;
   }
 
@@ -108,24 +103,22 @@ class Tracks extends Component {
     Tone.Transport.bpm.value = bpm;
   };
 
-  updateCurrentBeat = () => {
-    this.setState({currentBeat: this.beat})
-    console.log(this.beat)
-  }
+  updateCurrentBeat = index => {
+    this.setState({ currentBeat: index });
+  };
 
   start = () => {
     this.state.loop.start();
-    console.log(this.state.currentBeat)
+    console.log(this.state.currentBeat);
   };
 
   stop = () => {
     this.state.loop.stop();
-    this.setState({currentBeat: -1})
-    console.log(this.state.currentBeat)
+    this.setState({ currentBeat: -1 });
+    console.log(this.state.currentBeat);
   };
 
   onChange(event, i) {
-    // console.dir(event.target);
     let sample = event.target.innerText;
     const tracks = this.state.tracks;
     tracks[i].sample = sample;
@@ -134,15 +127,14 @@ class Tracks extends Component {
 
   handleBPMChange(ev) {
     this.setState({
-      bpm: ev.target.value,
+      bpm: ev.target.value
     });
-    // console.log(ev.target.value);
     this.updateBPM(ev.target.value);
   }
 
   render() {
     return (
-      <div>
+      <div className="Tracks">
         <div className="controls">
           <button
             className="small ui inverted blue icon button"
@@ -158,16 +150,27 @@ class Tracks extends Component {
           </button>
           <span className="Bpm">BPM</span>
 
-          <input className="BpmSlider" type="range" min="60" max="200" onChange={this.handleBPMChange} value={this.state.bpm} />
-          <input className="BpmText" value={this.state.bpm} onChange={this.handleBPMChange} />
+          <input
+            className="BpmSlider"
+            type="range"
+            min="60"
+            max="200"
+            onChange={this.handleBPMChange}
+            value={this.state.bpm}
+          />
+          <input
+            className="BpmText"
+            value={this.state.bpm}
+            onChange={this.handleBPMChange}
+          />
           <br />
         </div>
         <hr className="divider" />
 
-        {this.state.tracks.map((track, i) =>
+        {this.state.tracks.map((track, i) => (
           <Track
             key={i}
-            currentBeat={this.currentBeat}
+            currentBeat={this.state.currentBeat}
             removeTrack={this.removeTrack}
             i={i}
             beats={track.beats}
@@ -176,7 +179,7 @@ class Tracks extends Component {
             sounds={sounds}
             onChange={this.onChange}
           />
-        )}
+        ))}
         <br />
         <button
           className="ui inverted blue button"

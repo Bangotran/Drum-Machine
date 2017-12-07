@@ -1,15 +1,16 @@
-import React from 'react'
+import React from "react";
 
-function Beat ({ onClick, active, i }) {
+function Beat({ onClick, active, i, isCurrentBeat }) {
   let currentBeat;
-  const className = `Beat ${active ? "on" : Beat[i] === currentBeat ?
-  'current' : ''}`
-  return (
-    <button className={className} onClick={onClick} >
-    </button>
-  )
+  let className;
+  if (isCurrentBeat) {
+    className = "current";
+  } else if (active) {
+    className = "on";
+  } else {
+    className = "";
+  }
+
+  return <button className={`Beat ${className}`} onClick={onClick} />;
 }
-export default Beat
-
-
-// Beat[i] === currentBeat ? 'current' :
+export default Beat;

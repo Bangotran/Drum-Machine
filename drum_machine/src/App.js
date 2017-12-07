@@ -1,13 +1,18 @@
-import React, { Component } from 'react';
-import Tracks from './components/tracks';
-import './App.css'
+import React, { Component } from "react";
+import Tracks from "./components/tracks";
+import Footer from "./components/footer";
+import "./App.css";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <h1 className="ui blue inverted header">Bangin Beats!</h1> */}
-        <Tracks />
+        <div className="Site">
+          <div className="Main">
+            <Tracks />
+          </div>
+        </div>
+        <Footer />
       </div>
     );
   }

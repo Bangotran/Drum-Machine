@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import Beat from './beat';
-import { Dropdown } from 'semantic-ui-react';
-import Tone, { Player } from 'tone';
+import React, { Component } from "react";
+import Beat from "./beat";
+import { Dropdown } from "semantic-ui-react";
+import Tone, { Player } from "tone";
 
 class Track extends Component {
   constructor(props) {
@@ -11,35 +11,27 @@ class Track extends Component {
 
   onHandleClick(trackIndex, index) {
     const sample = this.props.sample;
-    console.log('sample:' + sample)
+    console.log("sample:" + sample);
     if (sample) {
       let player = new Player(`../audio/${sample}.wav`).toMaster();
-      // // play as soon as the buffer is loaded
       player.autostart = true;
     }
     this.props.clickBeat(trackIndex, index);
-    console.log("index" + index)
-    console.log("trackindex" + trackIndex)
+    console.log("index" + index);
+    console.log("trackindex" + trackIndex);
   }
 
-  // renderBeats() {
-  //   return this.props.beats.map((value, i) =>
-  //     <Beat
-  //       key={i}
-  //       onClick={() => this.onHandleClick(this.props.i, i)}
-  //       active={value}
-  //     />
-  //   );
-  // }
-
   renderBeats() {
-    return this.props.beats.map((value, i) =>
-      <Beat
-        key={i}
-        onClick={() => this.onHandleClick(this.props.i, i)}
-        active={value}
-      />
-    );
+    return this.props.beats.map((value, i) => {
+      return (
+        <Beat
+          key={i}
+          onClick={() => this.onHandleClick(this.props.i, i)}
+          active={value}
+          isCurrentBeat={i == this.props.currentBeat}
+        />
+      );
+    });
   }
 
   render() {

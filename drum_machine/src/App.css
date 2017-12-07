@@ -1,7 +1,21 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 body {
-  /*background: #3b444b;*/
   background: linear-gradient(black, slategrey, royalblue);
   color: white;
+}
+.Main {
+  margin-top: 50px;
+}
+
+.Tracks {
+  padding: 0px;
+  margin-left: 100px;
+  margin-top: 25px;
 }
 
 .Beat {
@@ -21,12 +35,6 @@ body {
 
 .Beat.current {
   background: royalblue;
-}
-
-.App {
-  padding: 0px;
-  margin-left: 40px;
-  margin-top: 25px;
 }
 
 .ui.search.selection.dropdown {
@@ -64,5 +72,29 @@ body {
 }
 
 .divider {
+  margin-left: 0;
+  width: 1200px;
   border: 2px solid deepskyblue;
+}
+
+.footer {
+  background: linear-gradient(slategrey, black);
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  text-align: right;
+}
+
+.footerText {
+  text-align: left;
+  color: deepskyblue;
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+.footerIcons {
+  margin-right: 25px;
+  color: deepskyblue;
 }
