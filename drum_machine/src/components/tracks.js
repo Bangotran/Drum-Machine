@@ -46,15 +46,26 @@ class Tracks extends Component {
 
     const keys = new Tone.Players(urls, ("autostart": true)).toMaster();
     return (time, note) => {
-      // for every track we want to do the following
       this.updateCurrentBeat(note);
       tracks.forEach(({ sample, beats }) => {
-        // check whether that beat should be played based upon the sequencer's note progression
         if (beats[note]) {
           keys.get(sample).start(time, 0, "4n", 0);
         }
       });
     };
+  }
+
+  create(tracks) {
+    const loop = new Tone.Sequence(
+      this.loopReducer(tracks),
+      new Array(16).fill(false).map((_, beat) => beat),
+      "16n"
+    );
+
+    Tone.Transport.bpm.value = 120;
+    Tone.Transport.start(0.1);
+
+    return loop;
   }
 
   update(loop, tracks, tempo) {
@@ -80,23 +91,10 @@ class Tracks extends Component {
   removeTrack(i) {
     this.setState({
       tracks: this.state.tracks.filter(function(element, index) {
-        if (i === index) console.log("removing this one");
+        if (i === index);
         return i != index;
       })
     });
-  }
-
-  create(tracks) {
-    const loop = new Tone.Sequence(
-      this.loopReducer(tracks),
-      new Array(16).fill(false).map((_, beat) => beat),
-      "16n"
-    );
-
-    Tone.Transport.bpm.value = 120;
-    Tone.Transport.start(0.1);
-
-    return loop;
   }
 
   updateBPM = bpm => {
@@ -109,13 +107,11 @@ class Tracks extends Component {
 
   start = () => {
     this.state.loop.start();
-    console.log(this.state.currentBeat);
   };
 
   stop = () => {
     this.state.loop.stop();
     this.setState({ currentBeat: -1 });
-    console.log(this.state.currentBeat);
   };
 
   onChange(event, i) {
