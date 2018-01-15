@@ -11,14 +11,11 @@ class Track extends Component {
 
   onHandleClick(trackIndex, index) {
     const sample = this.props.sample;
-    console.log("sample:" + sample);
     if (sample) {
       let player = new Player(`../audio/${sample}.wav`).toMaster();
       player.autostart = true;
     }
     this.props.clickBeat(trackIndex, index);
-    console.log("index" + index);
-    console.log("trackindex" + trackIndex);
   }
 
   renderBeats() {
